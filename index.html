@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>고를 수 없는 카드</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: one centred column of ink-outlined paper sheets on a cool classroom-grey ground, echoing the lesson deck. Single light look by choice (projector + tablets). */
+:root{
+  --ground:#eef0f3;
+  --paper:#fbf9f4;
+  --ink:#222326;
+  --ink-soft:#585b64;
+  --line:#222326;
+  --orange:#f6a04d;
+  --orange-2:#f8ad63;
+  --orange-deep:#a9530a;
+  --orange-tint:#fde8d1;
+  --cheek:#f07c5c;
+  --wall:#b23f36;
+  --wall-tint:#f9e4e0;
+  --pass:#22796b;
+  --pass-tint:#dcefeb;
+  --drop:#cfe5f3;
+  --muted:#c9ccd3;
+  --display:'Jua','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  --body:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{background:var(--ground)}
+body{
+  color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.65;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:20px 48px;
+  -webkit-text-size-adjust:100%;
+  word-break:keep-all;overflow-wrap:break-word;
+}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.25;text-wrap:balance}
+p{margin:0}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--ink-soft)}
+.soft{color:var(--ink-soft)}
+.small{font-size:14px}
+.sheet{background:var(--paper);border:3px solid var(--line);border-radius:18px;box-shadow:5px 5px 0 var(--line);padding:24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+@media (max-width:480px){.sheet{padding:18px}}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.row.end{justify-content:flex-end}
+.row.between{justify-content:space-between}
+.btn{
+  font-family:var(--display);font-size:20px;line-height:1.2;color:var(--ink);
+  background:var(--orange);border:3px solid var(--line);border-radius:999px;
+  padding:12px 26px;min-height:54px;box-shadow:3px 3px 0 var(--line);cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line)}
+.btn:focus-visible,.chip:focus-visible,.bcard:focus-visible,.link:focus-visible{outline:3px solid var(--orange-deep);outline-offset:3px}
+.btn.ghost{background:var(--paper)}
+.btn.small-btn{font-size:16px;min-height:42px;padding:8px 18px}
+.btn[disabled]{opacity:.4;cursor:not-allowed;transform:none;box-shadow:3px 3px 0 var(--line)}
+.link{background:none;border:0;font:inherit;font-size:14px;color:var(--ink-soft);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:6px 2px}
+a{color:var(--orange-deep)}
+
+/* ---------- start ---------- */
+.hero{padding-top:28px;gap:18px}
+.hero h1{font-size:clamp(44px,9vw,76px);letter-spacing:-.01em}
+.hero .lead{font-size:clamp(17px,2.6vw,20px);max-width:36em}
+.fan{display:flex;justify-content:center;padding:18px 0 6px}
+.fan .mini{
+  width:clamp(62px,15vw,96px);aspect-ratio:3/4;border:3px solid var(--line);border-radius:12px;
+  background:repeating-linear-gradient(135deg,var(--orange) 0 10px,var(--orange-2) 10px 20px);
+  box-shadow:3px 3px 0 var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:var(--display);color:var(--ink);margin-left:-14px;position:relative
+}
+.fan .mini:first-child{margin-left:0}
+.fan .mini b{font-weight:400;font-size:clamp(26px,6vw,40px);line-height:1}
+.fan .mini span{font-size:clamp(11px,2.4vw,14px);background:var(--paper);border:2px solid var(--line);border-radius:999px;padding:0 7px;margin-top:6px}
+.fan .mini:nth-child(1){transform:rotate(-12deg) translateY(10px)}
+.fan .mini:nth-child(2){transform:rotate(-6deg) translateY(2px)}
+.fan .mini:nth-child(4){transform:rotate(6deg) translateY(2px)}
+.fan .mini:nth-child(5){transform:rotate(12deg) translateY(10px)}
+.note{border:2px dashed var(--line);border-radius:14px;padding:14px 16px;background:var(--orange-tint)}
+.rule{font-family:var(--display);font-size:20px}
+.rule mark{background:var(--orange);padding:0 6px;border-radius:6px;color:var(--ink)}
+
+/* ---------- cards ---------- */
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.cards .bcard:last-child{grid-column:span 2}
+@media (min-width:640px){.cards{grid-template-columns:repeat(5,minmax(0,1fr))}.cards .bcard:last-child{grid-column:auto}}
+.bcard{background:none;border:0;padding:0;cursor:pointer;perspective:900px;font:inherit;color:inherit;text-align:left;min-width:0;-webkit-tap-highlight-color:transparent}
+.bcard .in{display:grid;transition:transform .55s cubic-bezier(.3,.7,.3,1);transform-style:preserve-3d;height:100%}
+.bcard.on .in{transform:rotateY(180deg)}
+.face{grid-area:1/1;border:3px solid var(--line);border-radius:14px;padding:12px;min-height:178px;display:flex;flex-direction:column;gap:6px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:3px 3px 0 var(--line)}
+.face.back{background:repeating-linear-gradient(135deg,var(--orange) 0 10px,var(--orange-2) 10px 20px);align-items:center;justify-content:center;text-align:center}
+.face.back b{font-family:var(--display);font-weight:400;font-size:48px;line-height:1}
+.face.back span{font-size:13px;font-weight:700;background:var(--paper);border:2px solid var(--line);border-radius:999px;padding:1px 9px}
+.face.front{background:var(--paper);transform:rotateY(180deg)}
+.face.front .val{font-family:var(--display);font-size:23px;line-height:1.25}
+.face.front .cap{font-size:13px;color:var(--ink-soft);line-height:1.5}
+.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.who div{border:2px solid var(--line);border-radius:12px;padding:10px 14px;background:var(--paper)}
+.who b{display:block;font-family:var(--display);font-weight:400;font-size:24px}
+
+/* ---------- talent pot ---------- */
+.pot{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap}
+.slot{width:30px;height:30px;border:2px solid var(--line);border-radius:8px;background:var(--paper);display:grid;place-items:center;font-size:16px;line-height:1}
+.slot.pass{background:var(--pass-tint)}
+.slot.wall{background:var(--wall-tint)}
+.slot.fixed{background:var(--pass-tint);border-style:dashed}
+.potbig .slot{width:44px;height:44px;font-size:23px;border-radius:10px}
+.flower{font-size:44px;line-height:1}
+
+/* ---------- stage ---------- */
+.top{display:flex;flex-direction:column;gap:10px}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.steps li{border:2px solid var(--line);border-radius:12px;padding:6px 4px;text-align:center;font-size:14px;font-weight:700;background:var(--paper);color:var(--ink-soft)}
+.steps li.now{background:var(--orange);color:var(--ink)}
+.steps li.done{color:var(--ink)}
+.steps li .ic{display:block;font-size:20px;line-height:1.2}
+.counter{display:flex;gap:10px 14px;flex-wrap:wrap;align-items:center;font-size:14px;font-weight:700}
+.counter .pill{border:2px solid var(--line);border-radius:999px;padding:2px 12px;background:var(--paper)}
+.counter .w{background:var(--wall-tint);color:var(--wall)}
+.stage-head h2{font-size:clamp(30px,6vw,42px)}
+.scene{display:flex;align-items:flex-end;gap:16px}
+.av{width:92px;height:100px;flex:none}
+.av .b{fill:var(--orange);stroke:var(--line);stroke-width:4}
+.av .ln{fill:none;stroke:var(--line);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.av .ey{fill:var(--line)}
+.av .ck{fill:var(--cheek);opacity:.55}
+.av .dr{fill:var(--drop);stroke:var(--line);stroke-width:2.5}
+.bubble{position:relative;flex:1;min-width:0;background:var(--paper);border:3px solid var(--line);border-radius:16px;padding:12px 16px;font-family:var(--display);font-size:clamp(20px,4.2vw,26px);line-height:1.35;margin-bottom:30px}
+.bubble::after{content:"";position:absolute;left:-11px;bottom:16px;width:16px;height:16px;background:inherit;border-left:3px solid var(--line);border-bottom:3px solid var(--line);transform:rotate(45deg)}
+.bubble.hint{font-family:var(--body);font-size:15px;color:var(--ink-soft)}
+.bubble.gloom{color:var(--ink-soft);background:var(--ground)}
+.pop{animation:pop .22s ease-out}
+@keyframes pop{from{transform:scale(.93)}to{transform:none}}
+.gauge{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.gauge i{height:22px;border:2px solid var(--line);border-radius:6px;background:var(--paper);transition:background .15s}
+.gauge i.f{background:var(--orange)}
+.pct{font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums}
+.pct.full{color:var(--orange-deep)}
+.outs{display:flex;flex-direction:column;gap:16px}
+.out{border:3px solid var(--line);border-radius:16px;overflow:hidden;background:var(--paper);box-shadow:4px 4px 0 var(--line)}
+.out .strip{height:22px;border-bottom:3px solid var(--line)}
+.out.wall .strip{background-color:var(--wall);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='22'%3E%3Cpath d='M0 0.75H48M0 11H48M0 21.25H48M1 0V11M25 0V11M13 11V22M37 11V22' stroke='%23efcfc8' stroke-width='1.6' fill='none'/%3E%3C/svg%3E")}
+.out.pass .strip{background:repeating-linear-gradient(90deg,var(--pass) 0 14px,var(--pass-tint) 14px 28px)}
+.out .hd{padding:14px 18px 6px;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.out .tag{font-family:var(--display);font-size:16px;border:2px solid var(--line);border-radius:999px;padding:1px 12px}
+.out.wall .tag{background:var(--wall);color:var(--paper)}
+.out.pass .tag{background:var(--pass);color:var(--paper)}
+.out .hd h3{font-size:22px}
+.out.wall .hd h3{color:var(--wall)}
+.out.pass .hd h3{color:var(--pass)}
+.out .bd{padding:0 18px 16px;display:flex;flex-direction:column;gap:10px}
+.out.wall .bd .why{background:var(--wall-tint);border-radius:10px;padding:8px 12px;font-size:15px}
+.stats{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.stats li{padding-left:18px;position:relative;font-size:15.5px}
+.stats li::before{content:"";position:absolute;left:3px;top:.62em;width:7px;height:7px;border-radius:2px;background:var(--ink)}
+.stats b{font-variant-numeric:tabular-nums}
+.src{font-size:13px;color:var(--ink-soft)}
+.src a{color:var(--ink-soft)}
+.drop{animation:drop .45s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes drop{from{transform:translateY(-16px);opacity:0}to{transform:none;opacity:1}}
+.shake{animation:shake .35s ease-in-out .25s 1}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* ---------- result ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.cchip{border:2px solid var(--line);border-radius:999px;padding:3px 12px;font-size:14.5px;background:var(--paper)}
+.cchip.w{border-color:var(--wall);background:var(--wall-tint);color:var(--wall);font-weight:700}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tile{border:3px solid var(--line);border-radius:14px;padding:12px 16px;background:var(--paper)}
+.tile .k{font-size:14px;font-weight:700;color:var(--ink-soft)}
+.tile .v{font-family:var(--display);font-size:clamp(28px,6vw,40px);line-height:1.2;font-variant-numeric:tabular-nums}
+.tile.w .v{color:var(--wall)}
+.potrow{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+.fate{font-size:18px;border-left:6px solid var(--orange);padding:6px 0 6px 14px}
+.fate strong{font-weight:700}
+.society{background:var(--orange-tint)}
+.whatif-out{border:2px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--pass-tint)}
+.hist{overflow-x:auto}
+.hist table{border-collapse:collapse;width:100%;font-size:15px}
+.hist th,.hist td{border-bottom:2px solid var(--muted);padding:8px 8px;text-align:left;white-space:nowrap;vertical-align:middle}
+.hist th{font-size:13px;color:var(--ink-soft)}
+.hist tr.cur td{background:var(--orange-tint)}
+.hist .slot{width:24px;height:24px;font-size:13px;border-radius:6px}
+.hist .pot{flex-wrap:nowrap}
+
+/* ---------- think ---------- */
+.choice{display:flex;flex-wrap:wrap;gap:10px}
+.chip{font:inherit;font-size:16px;font-weight:700;border:2.5px solid var(--line);border-radius:999px;padding:8px 16px;background:var(--paper);cursor:pointer;min-height:44px;color:var(--ink);text-align:left;-webkit-tap-highlight-color:transparent}
+.chip[aria-pressed="true"]{background:var(--orange)}
+.preview{border:2px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--paper);font-size:18px}
+.preview .blank{color:var(--ink-soft)}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.three{grid-template-columns:1fr}}
+.three label{display:flex;flex-direction:column;gap:6px;font-weight:700}
+.three label small{font-weight:400;color:var(--ink-soft);font-size:13px}
+textarea,input[type=number]{font:inherit;font-size:16px;border:2px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--paper);color:var(--ink);width:100%}
+textarea{min-height:84px;resize:vertical}
+textarea:focus,input:focus{outline:3px solid var(--orange);outline-offset:1px}
+
+@media (prefers-reduced-motion:reduce){
+  .bcard .in,.gauge i{transition:none}
+  .drop,.shake,.pop{animation:none}
+}
+</style>
+</head>
+<body>
+
+<main class="wrap" id="app" aria-live="polite"></main>
+
+<script>
+(function(){
+  'use strict';
+  var app = document.getElementById('app');
+
+  /* ---------- 한국어 조사 ---------- */
+  function hasBatchim(word){
+    var ch = String(word).trim().slice(-1);
+    var c = ch.charCodeAt(0);
+    if (c < 0xAC00 || c > 0xD7A3) return false;
+    return (c - 0xAC00) % 28 > 0;
+  }
+  function j(word, pair){
+    var p = pair.split('/');
+    return word + (hasBatchim(word) ? p[0] : p[1]);
+  }
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function reduced(){ try{ return matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){ return false; } }
+
+  /* ---------- 출처 ---------- */
+  var SRC = {
+    edu:{t:'교육부, 2025년 초중고 사교육비조사(2026년 3월 발표)', u:'https://www.newsis.com/view/NISX20260312_0003545499'},
+    multi:{t:'여성가족부, 2024년 전국다문화가족실태조사', u:'https://www.heraldk.com/article/2025073100450094146'},
+    dis:{t:'한국장애인고용공단, 장애인경제활동실태조사(2024년 기준)', u:'https://sgsg.hankyung.com/tag/20251107150832098'},
+    beauty:{t:'Hamermesh & Biddle(1994), 미국 연구', u:'https://www.nber.org/papers/w4518'},
+    wage:{t:'OECD 성별 임금 격차(2024년), 한경비즈니스 보도', u:'https://magazine.hankyung.com/business/article/202603064589b'},
+    inventor:{t:'Bell·Chetty 외(2019), 미국 연구', u:'https://equitablegrowth.org/working-papers/inventor-america-exposure/'},
+    inventor2:{t:'미국 리치먼드 연방준비은행 연구 소개', u:'https://richmondfed.org/publications/research/econ_focus/2019/q1/research_spotlight'}
+  };
+  function srcLine(keys){
+    return '<p class="src">출처: ' + keys.map(function(k){
+      return '<a href="'+SRC[k].u+'" target="_blank" rel="noopener">'+esc(SRC[k].t)+'</a>';
+    }).join(' · ') + '</p>';
+  }
+
+  /* ---------- 인물 만들기 ---------- */
+  var TALENTS = [
+    {t:'과학', job:'과학자'}, {t:'그림', job:'디자이너'}, {t:'음악', job:'작곡가'},
+    {t:'요리', job:'요리사'}, {t:'글쓰기', job:'작가'}, {t:'사람 돌보기', job:'간호사'},
+    {t:'운동', job:'운동선수'}, {t:'수학', job:'엔지니어'}, {t:'발명', job:'발명가'},
+    {t:'가르치기', job:'선생님'}
+  ];
+  var ORDER = ['wealth','origin','body','looks','gender'];
+  var KEYLABEL = {wealth:'집안 형편', origin:'부모의 출신', body:'몸', looks:'외모', gender:'성별'};
+
+  function makePerson(){
+    var female = Math.random() < 0.5;
+    var p = {
+      female: female,
+      migrant: Math.random() < 0.4,
+      disabled: Math.random() < 0.4,
+      looksOff: Math.random() < 0.4,
+      poor: Math.random() < 0.4,
+      parent: pick(['엄마','아빠']),
+      talent: pick(TALENTS)
+    };
+    var given = female ? pick(['서연','지우','하은','민서','수아','예린','지민','유나'])
+                       : pick(['민준','서준','도윤','하준','지호','우진','시우','건우']);
+    p.name = pick(['김','이','박','최','정','강','윤','장']) + given;
+    p.bad = {gender:p.female, origin:p.migrant, body:p.disabled, looks:p.looksOff, wealth:p.poor};
+    return p;
+  }
+
+  function cardsOf(p){
+    return [
+      {key:'gender', label:'성별', val: p.female ? '여성' : '남성', cap:''},
+      {key:'origin', label:'부모의 출신', val: p.migrant ? (j(p.parent,'이/가')+' 다른 나라 출신') : '두 분 모두 한국 출신',
+        cap: p.migrant ? '이주배경 가정' : ''},
+      {key:'body', label:'몸', val: p.disabled ? '장애가 있음' : '장애가 없음', cap: p.disabled ? '휠체어를 이용함' : ''},
+      {key:'looks', label:'외모', val: p.looksOff ? '기준과 다름' : '기준에 가까움',
+        cap: p.looksOff ? "사람들이 흔히 말하는 외모 기준과 거리가 멂" : "사람들이 흔히 '잘생겼다·예쁘다'고 하는 외모"},
+      {key:'wealth', label:'집안 형편', val: p.poor ? '어려움' : '넉넉함',
+        cap: p.poor ? '가구 소득 월 300만 원 미만' : '가구 소득 월 800만 원 이상'}
+    ];
+  }
+
+  /* ---------- 단계, 대사, 벽 ---------- */
+  var STAGES = [
+    {short:'학교', ic:'🏫', age:'13세', place:'중학교', verb:'공부하기', keys:['wealth'],
+      scene:function(N){ return j(N,'은/는')+' 성적을 올리고 싶어 매일 열심히 공부하기로 했습니다.'; },
+      pass:['좋아, 시작하자!','학원에서 배운 방법이다!','잘된다!','조금만 더!','해냈다!'],
+      wall:{wealth:['좋아, 시작하자!','이 문제는 어떻게 푸는 거지…','친구들은 학원에서 배웠대…','아이고…','……']}},
+    {short:'진학', ic:'🎓', age:'19세', place:'대학 진학', verb:'입시 준비하기', keys:['origin'],
+      scene:function(N){ return j(N,'은/는')+' 원하는 대학에 가려고 마지막까지 최선을 다했습니다.'; },
+      pass:['끝까지 해 보자!','집중이 잘된다!','모의고사 점수가 올랐어!','조금만 더!','해냈다!'],
+      wall:{origin:['끝까지 해 보자!','오늘 또 그 말을 들었어…','괜찮아, 참으면 돼…','아이고…','……']}},
+    {short:'취업', ic:'💼', age:'25세', place:'취업', verb:'면접 준비하기', keys:['body','looks'],
+      scene:function(N){ return j(N,'은/는')+' 원하는 회사에 지원서를 내고 면접을 열심히 준비했습니다.'; },
+      pass:['면접 준비 시작!','예상 질문을 다 외웠다!','자신 있어!','조금만 더!','준비 끝!'],
+      wall:{
+        body:['면접 준비 시작!','그 건물에 경사로가 있을까…','계단뿐이면 어떡하지…','아이고…','……'],
+        looks:['면접 준비 시작!','예상 질문을 다 외웠다!','면접관이 내 얼굴만 보는 것 같아…','아이고…','……'],
+        both:['면접 준비 시작!','그 건물에 경사로가 있을까…','면접관이 내 얼굴만 보는 것 같아…','아이고…','……']
+      }},
+    {short:'직장', ic:'🏢', age:'35세', place:'직장', verb:'일하기', keys:['gender'],
+      scene:function(N){ return j(N,'은/는')+' 10년 동안 같은 회사에서 성실하게 일하며 실력을 쌓았습니다.'; },
+      pass:['오늘도 열심히!','프로젝트 성공이다!','실력이 늘고 있어!','조금만 더!','해냈다!'],
+      wall:{gender:['오늘도 열심히!','프로젝트 성공이다!','그런데 승진 명단에 내 이름이 없네…','아이고…','……']}}
+  ];
+  var MOOD_PASS = ['happy','happy','happy','happy','happy'];
+  var MOOD_WALL = ['happy','neutral','worried','sad','sad'];
+
+  function stageWalls(st){ return st.keys.filter(function(k){ return S.p.bad[k]; }); }
+  function stageLines(st){
+    var w = stageWalls(st);
+    if (!w.length) return {lines:st.pass, moods:MOOD_PASS, wall:false};
+    var key = w.length > 1 ? 'both' : w[0];
+    return {lines:st.wall[key], moods:MOOD_WALL, wall:true};
+  }
+
+  function avatar(mood){
+    var eyes, mouth, extra = '';
+    if (mood === 'happy'){
+      eyes = '<path class="ln" d="M38 60q7-9 14 0M68 60q7-9 14 0"/>';
+      mouth = '<path class="ln" d="M46 76q14 15 28 0"/>';
+      extra = '<circle class="ck" cx="34" cy="74" r="7"/><circle class="ck" cx="86" cy="74" r="7"/>';
+    } else if (mood === 'neutral'){
+      eyes = '<circle class="ey" cx="45" cy="60" r="4.5"/><circle class="ey" cx="75" cy="60" r="4.5"/>';
+      mouth = '<path class="ln" d="M50 81h20"/>';
+    } else if (mood === 'worried'){
+      eyes = '<path class="ln" d="M37 49l14 4M83 49l-14 4"/><circle class="ey" cx="45" cy="62" r="4.5"/><circle class="ey" cx="75" cy="62" r="4.5"/>';
+      mouth = '<path class="ln" d="M48 85q12-9 24 0"/>';
+      extra = '<path class="dr" d="M98 34c4 7 6 10 6 13a6 6 0 0 1-12 0c0-3 2-6 6-13z"/>';
+    } else {
+      eyes = '<path class="ln" d="M38 60q7 6 14 0M68 60q7 6 14 0"/>';
+      mouth = '<path class="ln" d="M47 88q13-12 26 0"/>';
+      extra = '<path class="dr" d="M46 68c2 4 3 6 3 8a3 3 0 0 1-6 0c0-2 1-4 3-8z"/>';
+    }
+    return '<svg class="av" viewBox="0 0 120 130" aria-hidden="true">' +
+      '<path class="b" d="M60 8C89 8 106 30 106 62v42c0 12-9 19-20 19H34c-11 0-20-7-20-19V62C14 30 31 8 60 8z"/>' +
+      eyes + mouth + extra + '</svg>';
+  }
+
+  function outcome(key, p){
+    var N = p.name;
+    switch(key){
+      case 'wealth': {
+        var st = ['사교육 참여율: 가구 소득 월 800만 원 이상 <b>84.9%</b> · 300만 원 미만 <b>52.8%</b>',
+                  '사교육을 받는 학생 1명의 월평균 비용: <b>66.2만 원</b> · <b>19.2만 원</b>'];
+        return p.poor
+          ? {wall:true, title:'학원비를 낼 형편이 안 되었습니다',
+             body: j(N,'은/는')+' 혼자 문제집을 풀었습니다. 같은 노력을 했지만 배울 기회부터 달랐습니다.',
+             stats:st, src:['edu']}
+          : {wall:false, title:'필요한 학원과 책을 지원받았습니다',
+             body: j(N,'은/는')+' 원하는 공부를 마음껏 할 수 있었습니다. 형편이 어려운 친구는 같은 노력을 해도 이런 지원을 받기 어려웠습니다.',
+             stats:st, src:['edu']};
+      }
+      case 'origin': {
+        var st2 = ['다문화 가정 자녀의 고등교육(대학 등) 취학률 <b>61.9%</b>, 전체 국민보다 <b>13.0%p</b> 낮음',
+                   '차별을 겪은 다문화 가족 구성원의 <b>80.7%</b>는 "그냥 참았다"고 답함'];
+        return p.migrant
+          ? {wall:true, title:'대학으로 가는 길이 더 좁았습니다',
+             body: j(N,'은/는')+' '+p.parent+'의 출신 때문에 놀림을 받은 적이 있었지만, 말하지 않고 참았습니다. 진학 준비에 쓸 힘이 그만큼 줄었습니다.',
+             stats:st2, src:['multi']}
+          : {wall:false, title:'부모님의 출신 때문에 다른 눈길을 받은 적은 없었습니다',
+             body: j(N,'은/는')+' 진학 준비에만 집중할 수 있었습니다. 다문화 가정의 친구들은 사정이 달랐습니다.',
+             stats:st2, src:['multi']};
+      }
+      case 'body': {
+        var st3 = ['15세 이상 등록 장애인의 고용률 <b>37.5%</b> (2024년)',
+                   '같은 해 전체 인구 고용률은 약 <b>63%</b>'];
+        return p.disabled
+          ? {wall:true, title:'일할 기회가 훨씬 적었습니다',
+             body: '면접장이 있는 건물에는 경사로가 없었습니다. 면접관은 '+j(N,'이/가')+' 일을 해낼 수 있을지부터 의심했습니다.',
+             stats:st3, src:['dis']}
+          : {wall:false, title:'면접장까지 가는 데 어려움이 없었습니다',
+             body: j(N,'은/는')+' 아무 불편 없이 면접을 봤습니다. 휠체어를 타는 지원자에게는 계단 하나도 벽이 됩니다.',
+             stats:st3, src:['dis']};
+      }
+      case 'looks': {
+        var st4 = ['외모가 평범하다고 평가된 사람은 같은 조건에서도 임금이 <b>5~10%</b> 낮았음'];
+        return p.looksOff
+          ? {wall:true, title:'면접관의 눈길이 외모에 먼저 갔습니다',
+             body: j(N,'은/는')+' 질문에 막힘없이 답했지만, 결과는 기대보다 낮았습니다.',
+             stats:st4, src:['beauty']}
+          : {wall:false, title:'외모가 오히려 도움이 되었습니다',
+             body: '면접관은 '+j(N,'을/를')+' 좋게 보았습니다. 같은 실력이어도 외모가 기준과 다른 사람은 손해를 봅니다.',
+             stats:st4, src:['beauty']};
+      }
+      case 'gender': {
+        var st5 = ['한국의 성별 임금 격차 <b>29.0%</b>, OECD 회원국 중 가장 큼 (2024년)',
+                   '이 격차에는 직종·승진·경력 단절의 차이가 함께 쌓여 있음'];
+        return p.female
+          ? {wall:true, title:'월급과 승진에서 뒤처졌습니다',
+             body: j(N,'은/는')+' 아이를 낳은 뒤 승진 대상에서 빠졌고, 같은 해 입사한 남자 동기보다 월급이 적었습니다.',
+             stats:st5, src:['wage']}
+          : {wall:false, title:'성별 때문에 월급이 깎이지는 않았습니다',
+             body: j(N,'은/는')+' 계획대로 승진했습니다. 다만 육아휴직을 쓰려 하자 "남자가 무슨 육아휴직이냐"는 말을 들었습니다.',
+             stats:st5, src:['wage']};
+      }
+    }
+  }
+
+  /* 벽 허물기: 사회가 바꿀 수 있는 것 */
+  var FIX = {
+    wealth:'누구나 무료로 배울 수 있는 학습 지원',
+    origin:'이주배경 학생을 위한 한국어·진학 지원과 차별 없는 학교',
+    body:'모든 건물에 경사로, 장애인 고용 지원',
+    looks:'외모를 보지 않는 블라인드 면접',
+    gender:'같은 일에 같은 임금, 눈치 보지 않는 육아휴직'
+  };
+
+  /* ---------- 상태 ---------- */
+  var S = null;
+  var HKEY = 'choose-cards-history-v1';
+  var HIST = [];
+  try{ HIST = JSON.parse(sessionStorage.getItem(HKEY) || '[]') || []; }catch(e){ HIST = []; }
+  function saveH(){ try{ sessionStorage.setItem(HKEY, JSON.stringify(HIST)); }catch(e){} }
+
+  function fresh(){
+    var p = makePerson();
+    S = {p:p, cards:cardsOf(p), flipped:{}, stage:0, effort:0, revealed:false,
+         res:{}, recorded:false, fixed:{}, judge:null, values:[]};
+  }
+  function wallsList(){ return ORDER.filter(function(k){ return S.res[k] === 'wall'; }); }
+  function go(fn){ fn(); try{ window.scrollTo({top:0, behavior:'auto'}); }catch(e){ window.scrollTo(0,0); } }
+
+  function potHTML(res, fixed, big){
+    return '<span class="pot'+(big?' potbig':'')+'" role="img" aria-label="재능 화분">' + ORDER.map(function(k){
+      var r = res[k], cls = 'slot', ch = '';
+      if (r === 'pass'){ cls += ' pass'; ch = '🌿'; }
+      else if (r === 'wall'){
+        if (fixed && fixed[k]){ cls += ' fixed'; ch = '🌿'; }
+        else { cls += ' wall'; ch = '🧱'; }
+      }
+      return '<span class="'+cls+'" title="'+KEYLABEL[k]+'">'+ch+'</span>';
+    }).join('') + '</span>';
+  }
+
+  function fateFor(n){
+    if (n <= 1) return {lost:false, flower:'🌸', short:'재능을 펼침'};
+    if (n === 2) return {lost:false, flower:'🌷', short:'늦게, 어렵게 이룸'};
+    return {lost:true, flower:'🥀', short:'재능을 펼치지 못함'};
+  }
+  function fateSentence(n){
+    var p = S.p, N = p.name, T = p.talent;
+    if (n <= 1) return '그 재능을 마음껏 펼쳐 <strong>'+j(T.job,'이/가')+' 되었습니다.</strong>';
+    if (n === 2) return '결국 '+j(T.job,'이/가')+' 되었지만, <strong>다른 사람보다 훨씬 늦게, 훨씬 어렵게</strong> 이뤘습니다.';
+    return '하지만 벽에 막혀 <strong>그 재능을 펼치지 못했습니다.</strong> 사회는 한 명의 '+j(T.job,'을/를')+' 잃었습니다.';
+  }
+
+  /* ---------- 1. 시작 ---------- */
+  function renderStart(){
+    app.className = 'wrap';
+    app.innerHTML =
+      '<section class="sheet hero">' +
+        '<p class="eyebrow">인성리더십2 · 차별과 불평등</p>' +
+        '<h1>고를 수 없는 카드</h1>' +
+        '<div class="fan" aria-hidden="true">' +
+          ['성별','출신','몸','외모','형편'].map(function(t){ return '<div class="mini"><b>?</b><span>'+t+'</span></div>'; }).join('') +
+        '</div>' +
+        '<p class="lead">태어날 때 받는 카드는 아무도 고를 수 없습니다. 성별, 부모의 출신, 몸, 외모, 집안 형편. 지금부터 무작위로 카드를 받은 한 사람의 삶을 대신 살아 봅니다.</p>' +
+        '<div class="note">이 인물은 내가 아닙니다. 카드는 그 사람의 가치와 아무 관계가 없습니다. 벽을 만드는 것은 카드가 아니라 사람들의 차별과 사회의 불평등입니다.</div>' +
+        '<p class="rule">규칙은 하나입니다. 모든 단계에서 <mark>노력 게이지를 100%</mark>까지 채우세요.</p>' +
+        '<div class="row between">' +
+          '<button class="btn" id="start-btn" type="button">카드 받기</button>' +
+          '<span class="soft small">한 번에 약 3분 · 여러 번 살아 볼 수 있습니다</span>' +
+        '</div>' +
+      '</section>' +
+      '<p class="soft small">토론을 위해 카드가 나올 확률은 실제 인구 비율보다 고르게 맞췄습니다. 결과는 어디에도 저장되지 않습니다.</p>';
+    document.getElementById('start-btn').onclick = function(){ fresh(); go(renderCards); };
+  }
+
+  /* ---------- 2. 카드 뽑기 ---------- */
+  function renderCards(){
+    app.className = 'wrap';
+    var p = S.p;
+    app.innerHTML =
+      '<section class="sheet">' +
+        '<p class="eyebrow">'+(HIST.length ? (HIST.length+1)+'번째 삶 · ' : '')+'태어나기</p>' +
+        '<h2 style="font-size:clamp(28px,5.5vw,38px)">카드 다섯 장을 눌러 뒤집으세요</h2>' +
+        '<div class="cards" id="cards">' +
+          S.cards.map(function(c, i){
+            return '<button class="bcard" type="button" data-i="'+i+'" aria-label="'+esc(c.label)+' 카드 뒤집기">' +
+              '<div class="in">' +
+                '<div class="face back"><b>?</b><span>'+esc(c.label)+'</span></div>' +
+                '<div class="face front"><span class="eyebrow">'+esc(c.label)+'</span><span class="val">'+esc(c.val)+'</span>' +
+                  (c.cap ? '<span class="cap">'+esc(c.cap)+'</span>' : '') + '</div>' +
+              '</div></button>';
+          }).join('') +
+        '</div>' +
+        '<div id="who" hidden>' +
+          '<div class="who">' +
+            '<div><span class="eyebrow">이름</span><b>'+esc(p.name)+'</b></div>' +
+            '<div><span class="eyebrow">타고난 재능</span><b>'+esc(p.talent.t)+'</b></div>' +
+          '</div>' +
+          '<p class="soft" style="margin-top:12px">'+j(p.name,'은/는')+' 대한민국에서 태어났습니다. 태어날 나라도 스스로 고른 것이 아닙니다. 재능 화분의 다섯 칸은 살아가며 하나씩 채워집니다.</p>' +
+        '</div>' +
+        '<div class="row between">' +
+          '<button class="link" id="flip-all" type="button">한꺼번에 뒤집기</button>' +
+          '<button class="btn" id="life-btn" type="button" disabled>삶 시작하기</button>' +
+        '</div>' +
+      '</section>';
+
+    var btns = app.querySelectorAll('.bcard');
+    function check(){
+      if (Object.keys(S.flipped).length >= S.cards.length){
+        document.getElementById('who').hidden = false;
+        document.getElementById('life-btn').disabled = false;
+        document.getElementById('flip-all').hidden = true;
+      }
+    }
+    Array.prototype.forEach.call(btns, function(b){
+      b.onclick = function(){ b.classList.add('on'); S.flipped[b.getAttribute('data-i')] = true; check(); };
+    });
+    document.getElementById('flip-all').onclick = function(){
+      Array.prototype.forEach.call(btns, function(b){ b.classList.add('on'); S.flipped[b.getAttribute('data-i')] = true; });
+      check();
+    };
+    document.getElementById('life-btn').onclick = function(){ S.stage = 0; go(renderStage); };
+  }
+
+  /* ---------- 3. 단계 ---------- */
+  function stepsBar(){
+    return '<div class="top">' +
+      '<ol class="steps">' + STAGES.map(function(st, i){
+        var cls = i < S.stage ? 'done' : (i === S.stage ? 'now' : '');
+        return '<li class="'+cls+'"><span class="ic" aria-hidden="true">'+st.ic+'</span>'+st.short+'</li>';
+      }).join('') + '</ol>' +
+      '<div class="counter">' +
+        '<span>재능: '+esc(S.p.talent.t)+'</span><span id="pot">'+potHTML(S.res)+'</span>' +
+        '<span class="pill">노력: 모든 단계 100%</span>' +
+        '<span class="pill w" id="wall-count">만난 벽 '+wallsList().length+'개</span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function outHTML(o){
+    return '<article class="out '+(o.wall?'wall':'pass')+' drop'+(o.wall?' shake':'')+'">' +
+      '<div class="strip" aria-hidden="true"></div>' +
+      '<div class="hd"><span class="tag">'+(o.wall?'벽':'통과')+'</span><h3>'+esc(o.title)+'</h3></div>' +
+      '<div class="bd">' +
+        '<p>'+esc(o.body)+'</p>' +
+        (o.wall ? '<p class="why">'+j(S.p.name,'이/가')+' 노력을 덜 해서가 아닙니다. 사람들이 카드를 보고 다르게 대했기 때문입니다.</p>' : '') +
+        '<ul class="stats">'+o.stats.map(function(s){ return '<li>'+s+'</li>'; }).join('')+'</ul>' +
+        srcLine(o.src) +
+      '</div></article>';
+  }
+
+  function renderStage(){
+    app.className = 'wrap';
+    var st = STAGES[S.stage];
+    var L = stageLines(st);
+    S.effort = 0; S.revealed = false;
+    app.innerHTML =
+      stepsBar() +
+      '<section class="sheet">' +
+        '<div class="stage-head"><p class="eyebrow">'+st.age+' · '+st.place+'</p><h2>'+st.ic+' '+st.place+'</h2></div>' +
+        '<p style="font-size:18px">'+esc(st.scene(S.p.name))+'</p>' +
+        '<div class="scene"><span id="av">'+avatar('neutral')+'</span>' +
+          '<p class="bubble hint" id="bubble" aria-live="polite">버튼을 누를 때마다 '+esc(S.p.name)+'의 말이 나옵니다. 잘 들어 보세요.</p></div>' +
+        '<div class="gauge" id="gauge" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>' +
+        '<div class="row between">' +
+          '<button class="btn" id="effort-btn" type="button">💪 '+st.verb+' <span id="taps">(0/5)</span></button>' +
+          '<span class="pct" id="pct">노력 0%</span>' +
+        '</div>' +
+      '</section>' +
+      '<div class="outs" id="outs"></div>' +
+      '<div class="row end" id="next-row" hidden><button class="btn" id="next-btn" type="button">'+(S.stage < STAGES.length-1 ? '다음 단계로' : '삶의 기록 보기')+'</button></div>';
+
+    var cells = document.querySelectorAll('#gauge i');
+    var eb = document.getElementById('effort-btn');
+    var bubble = document.getElementById('bubble');
+    var av = document.getElementById('av');
+    eb.onclick = function(){
+      if (S.effort >= 5) return;
+      var i = S.effort;
+      S.effort++;
+      for (var k=0;k<cells.length;k++) cells[k].classList.toggle('f', k < S.effort);
+      document.getElementById('taps').textContent = '('+S.effort+'/5)';
+      document.getElementById('pct').textContent = '노력 ' + (S.effort*20) + '%';
+      bubble.textContent = L.lines[i];
+      bubble.className = 'bubble' + (L.wall && i >= 1 ? ' gloom' : '');
+      void bubble.offsetWidth; bubble.classList.add('pop');
+      av.innerHTML = avatar(L.moods[i]);
+      if (S.effort >= 5){
+        document.getElementById('pct').classList.add('full');
+        eb.disabled = true;
+        setTimeout(reveal, 750);
+      }
+    };
+    document.getElementById('next-btn').onclick = function(){
+      if (S.stage < STAGES.length-1){ S.stage++; go(renderStage); }
+      else go(renderResult);
+    };
+  }
+
+  function reveal(){
+    if (S.revealed) return;
+    S.revealed = true;
+    var st = STAGES[S.stage];
+    var html = '';
+    st.keys.forEach(function(k){
+      var o = outcome(k, S.p);
+      S.res[k] = o.wall ? 'wall' : 'pass';
+      html += outHTML(o);
+    });
+    document.getElementById('outs').innerHTML = html;
+    document.getElementById('pot').innerHTML = potHTML(S.res);
+    document.getElementById('wall-count').textContent = '만난 벽 '+wallsList().length+'개';
+    document.getElementById('next-row').hidden = false;
+    var first = document.querySelector('#outs .out');
+    if (first && first.scrollIntoView){
+      try{ first.scrollIntoView({behavior: reduced() ? 'auto':'smooth', block:'start'}); }catch(e){}
+    }
+  }
+
+  /* ---------- 4. 삶의 기록 ---------- */
+  function renderResult(){
+    app.className = 'wrap';
+    var p = S.p, walls = wallsList(), n = walls.length, f = fateFor(n);
+    if (!S.recorded){
+      HIST.push({name:p.name, talent:p.talent.t, res:S.res, walls:n, fate:f.short});
+      saveH(); S.recorded = true;
+    }
+    var hist = HIST.length >= 2
+      ? '<section class="sheet">' +
+          '<h3 style="font-size:22px">내가 살아 본 삶들</h3>' +
+          '<div class="hist"><table><thead><tr><th>회차</th><th>인물</th><th>재능 화분</th><th>노력</th><th>벽</th><th>결과</th></tr></thead><tbody>' +
+            HIST.map(function(h, i){
+              return '<tr'+(i === HIST.length-1 ? ' class="cur"':'')+'><td>'+(i+1)+'</td><td>'+esc(h.name)+' · '+esc(h.talent)+'</td><td>'+potHTML(h.res)+'</td><td>100%</td><td>'+h.walls+'개</td><td>'+esc(h.fate)+'</td></tr>';
+            }).join('') +
+          '</tbody></table></div>' +
+          '<p>노력은 모든 삶에서 <b>100%</b>였습니다. 결과를 가른 것은 무엇이었을까요?</p>' +
+        '</section>'
+      : '';
+    var whatif = n
+      ? '<section class="sheet">' +
+          '<h3 style="font-size:22px">사회가 벽을 허문다면?</h3>' +
+          '<p class="soft">'+j(p.name,'이/가')+' 만난 벽 가운데 사회가 바꿀 수 있는 것을 눌러 보세요. 여러 개를 골라도 됩니다.</p>' +
+          '<div class="choice" id="fix-chips">' + walls.map(function(k){
+            return '<button class="chip fix-chip" type="button" id="fix-'+k+'" data-k="'+k+'" aria-pressed="false">🔨 '+esc(FIX[k])+'</button>';
+          }).join('') + '</div>' +
+          '<div class="whatif-out" id="whatif-out" hidden></div>' +
+        '</section>'
+      : '';
+
+    app.innerHTML =
+      '<section class="sheet">' +
+        '<p class="eyebrow">'+HIST.length+'번째 삶의 기록</p>' +
+        '<h2 style="font-size:clamp(32px,6vw,44px)">'+esc(p.name)+'의 삶</h2>' +
+        '<div class="chips">' + S.cards.map(function(c){
+          var w = S.res[c.key] === 'wall';
+          return '<span class="cchip'+(w?' w':'')+'">'+(w?'🧱 ':'')+esc(c.label)+': '+esc(c.val)+'</span>';
+        }).join('') + '</div>' +
+        '<div class="tiles">' +
+          '<div class="tile"><div class="k">노력</div><div class="v">4번 모두 100%</div></div>' +
+          '<div class="tile w"><div class="k">만난 벽</div><div class="v">'+n+'개</div></div>' +
+        '</div>' +
+        '<div class="potrow"><span class="eyebrow">재능 화분 · '+esc(p.talent.t)+'</span>'+potHTML(S.res, null, true)+'<span class="flower" aria-hidden="true">'+f.flower+'</span></div>' +
+        '<p class="fate">'+j(p.name,'은/는')+' '+esc(p.talent.t)+'에 재능이 있었습니다. '+fateSentence(n)+'</p>' +
+        '<p class="soft small">실제 삶은 이보다 훨씬 복잡합니다. 이 앱은 차별과 불평등이 남기는 영향을 보여 주려고 단순하게 만들었습니다(벽 0~1개: 재능을 펼침, 2개: 늦게 이룸, 3개 이상: 펼치지 못함).</p>' +
+      '</section>' +
+      whatif +
+      '<section class="sheet society">' +
+        '<h3 style="font-size:24px">한 사람 앞의 벽은 사회 전체의 손해가 됩니다</h3>' +
+        '<ul class="stats">' +
+          '<li>미국에서 소득 상위 1% 가정의 아이는 중위소득 이하 가정의 아이보다 발명가가 될 가능성이 <b>10배</b> 높았음</li>' +
+          '<li>여성·소수 인종·저소득층 아이들이 고소득 가정의 백인 남성만큼 발명했다면, 미국의 발명가는 지금의 약 <b>4배</b>였을 것</li>' +
+        '</ul>' +
+        '<p>연구자들은 이렇게 사라진 인재를 <b>"잃어버린 아인슈타인"</b>이라고 불렀습니다.</p>' +
+        srcLine(['inventor','inventor2']) +
+      '</section>' +
+      hist +
+      '<div class="row end">' +
+        '<button class="btn ghost" id="again-btn" type="button">다시 해보기</button>' +
+        '<button class="btn" id="think-btn" type="button">생각 정리하기</button>' +
+      '</div>';
+
+    if (n){
+      var out = document.getElementById('whatif-out');
+      Array.prototype.forEach.call(app.querySelectorAll('.fix-chip'), function(c){
+        c.onclick = function(){
+          var k = c.getAttribute('data-k');
+          if (S.fixed[k]) delete S.fixed[k]; else S.fixed[k] = true;
+          c.setAttribute('aria-pressed', S.fixed[k] ? 'true':'false');
+          var m = n - Object.keys(S.fixed).length;
+          if (m === n){ out.hidden = true; return; }
+          var g = fateFor(m);
+          out.hidden = false;
+          out.innerHTML =
+            '<div class="potrow">'+potHTML(S.res, S.fixed, true)+'<span class="flower" aria-hidden="true">'+g.flower+'</span></div>' +
+            '<p style="margin-top:8px">벽 <b>'+n+'개 → '+m+'개</b>. '+j(p.name,'은/는')+' '+fateSentence(m)+'</p>' +
+            '<p class="soft small" style="margin-top:6px">'+j(p.name,'은/는')+' 똑같이 노력했습니다. 바뀐 것은 사회입니다. 벽을 만든 것이 사회라면, 허무는 것도 사회가 할 수 있습니다.</p>';
+        };
+      });
+    }
+    document.getElementById('again-btn').onclick = function(){ fresh(); go(renderCards); };
+    document.getElementById('think-btn').onclick = function(){ go(renderThink); };
+  }
+
+  /* ---------- 5. 생각 정리 ---------- */
+  var VALUES = ['인간 존엄성','인권','평등','공정','자유','생명 존중','존중'];
+  function joinWords(arr){
+    if (arr.length === 1) return arr[0];
+    var last = arr[arr.length-1], head = arr.slice(0,-1);
+    var front = head.slice(0,-1).map(function(w){ return w+', '; }).join('');
+    return front + j(head[head.length-1],'과/와') + ' ' + last;
+  }
+  function renderThink(){
+    app.className = 'wrap';
+    app.innerHTML =
+      '<section class="sheet">' +
+        '<p class="eyebrow">생각 정리 1 · 수행평가 3-1 형식</p>' +
+        '<h2 style="font-size:clamp(24px,4.6vw,32px)">고를 수 없는 카드 때문에 기회가 달라지는 것은 정의로울까요?</h2>' +
+        '<div class="choice" role="group" aria-label="판단">' +
+          '<button class="chip" type="button" id="judge-no" aria-pressed="false">정의롭지 않다</button>' +
+          '<button class="chip" type="button" id="judge-yes" aria-pressed="false">정의롭다</button>' +
+        '</div>' +
+        '<p style="font-weight:700">이유에 넣을 &lt;보기&gt; 단어를 고르세요 (여러 개 가능)</p>' +
+        '<div class="choice" role="group" aria-label="보기 단어">' +
+          VALUES.map(function(v, i){ return '<button class="chip val-chip" type="button" id="val-'+i+'" data-v="'+esc(v)+'" aria-pressed="false">'+esc(v)+'</button>'; }).join('') +
+        '</div>' +
+        '<div class="preview" id="preview"></div>' +
+      '</section>' +
+      '<section class="sheet">' +
+        '<p class="eyebrow">생각 정리 2 · 수행평가 3-2 형식</p>' +
+        '<h2 style="font-size:clamp(24px,4.6vw,32px)">내가 살아 본 삶에서 만난 벽은 누구에게 어떤 문제를 남겼을까요?</h2>' +
+        '<p class="soft">한 칸에 한 줄씩, <b>누구에게 + 어떤 피해</b>로 쓰세요.</p>' +
+        '<div class="three">' +
+          '<label for="t-ind">개인<small>벽을 만난 인물에게는?</small><textarea id="t-ind" placeholder="누구에게 + 어떤 피해"></textarea></label>' +
+          '<label for="t-rel">관계<small>주변 사람과의 사이에는?</small><textarea id="t-rel" placeholder="누구에게 + 어떤 피해"></textarea></label>' +
+          '<label for="t-soc">사회<small>우리 사회 전체에는?</small><textarea id="t-soc" placeholder="누구에게 + 어떤 피해"></textarea></label>' +
+        '</div>' +
+        '<p class="soft small">다 쓴 뒤, 세 칸 모두 "누구에게"와 "어떤 피해"가 있는지 스스로 확인하세요.</p>' +
+      '</section>' +
+      '<div class="row between">' +
+        '<button class="link" id="home-btn" type="button">처음 화면으로</button>' +
+        '<button class="btn ghost" id="again-btn" type="button">다시 해보기</button>' +
+      '</div>';
+
+    function update(){
+      document.getElementById('judge-no').setAttribute('aria-pressed', S.judge === 'no' ? 'true':'false');
+      document.getElementById('judge-yes').setAttribute('aria-pressed', S.judge === 'yes' ? 'true':'false');
+      Array.prototype.forEach.call(app.querySelectorAll('.val-chip'), function(c){
+        c.setAttribute('aria-pressed', S.values.indexOf(c.getAttribute('data-v')) >= 0 ? 'true':'false');
+      });
+      var judgeTxt = S.judge === 'no' ? '정의롭지 않다' : (S.judge === 'yes' ? '정의롭다' : '<span class="blank">(판단)</span>');
+      var ordered = VALUES.filter(function(v){ return S.values.indexOf(v) >= 0; });
+      var valTxt = ordered.length ? esc(joinWords(ordered)) : '<span class="blank">(&lt;보기&gt; 단어)</span>';
+      var tail = S.judge === 'yes' ? '에 맞기 때문이다.' : '에 어긋나기 때문이다.';
+      document.getElementById('preview').innerHTML =
+        '고를 수 없는 카드 때문에 기회가 달라지는 것은 <b>'+judgeTxt+'</b>. 왜냐하면 <b>'+valTxt+'</b>'+tail;
+    }
+    document.getElementById('judge-no').onclick = function(){ S.judge = 'no'; update(); };
+    document.getElementById('judge-yes').onclick = function(){ S.judge = 'yes'; update(); };
+    Array.prototype.forEach.call(app.querySelectorAll('.val-chip'), function(c){
+      c.onclick = function(){
+        var v = c.getAttribute('data-v'), k = S.values.indexOf(v);
+        if (k >= 0) S.values.splice(k,1); else S.values.push(v);
+        update();
+      };
+    });
+    document.getElementById('home-btn').onclick = function(){ go(renderStart); };
+    document.getElementById('again-btn').onclick = function(){ fresh(); go(renderCards); };
+    update();
+  }
+
+  renderStart();
+})();
+</script>
+</body>
+</html>
